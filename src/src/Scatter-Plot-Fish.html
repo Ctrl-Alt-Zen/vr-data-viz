@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content=" width=device-width,initial-scale=1,shrink-to-fit=no,user-scalable=no,maximum-scale=1">
+    <title>Depth tests in Lake Erie</title>
+    <meta name="description" content="WATERWORLD - A-Frame">
+
+    <script src="../components/aframe/0.3.2/aframe.min.js"></script>
+    <script src="../components/aframe/0.3.0/kframe.min.js"></script>
+    <script src="../components/aframe/0.3.0/aframe-extras-bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+    <script src="https://rawgit.com/bryik/aframe-bmfont-text-component/master/dist/aframe-bmfont-text-component.min.js"></script> 
+    <script src="../components/aframe/0.3.0/aframe-scatter-component-flo-3.js"></script>
+
+</head>
+
+<body>
+    <script>
+
+        AFRAME.registerComponent('pitchmeter', {
+            schema: {
+            },
+            init: function (data) {
+                setInterval(this.beep, 1000);
+            },
+            tick: function() {
+            //    console.log('tick!');
+                var rotation = document.querySelector('[camera]').getAttribute('rotation');
+                var color = 'white'; 
+                if (rotation.x < -32) {
+                    color = 'red';
+                }
+                document.querySelector('[cursor]').setAttribute('color', color );
+            },
+            beep: function() {
+                console.log('beep!');
+            }
+        });
+    </script>
+
+    <!-- A-scene [stats]-->
+    <a-scene id="scene">
+        <a-assets>
+            <a-asset-item id="forest-floor" src="../models/forest-floor/forest-floor.obj"></a-asset-item>
+            <a-asset-item id="forest-floor-mtl" src="../models/forest-floor/forest-floor.mtl"></a-asset-item>
+            <a-asset-item id="fish-dae" src="crappie.dae"></a-asset-item>
+            <img id="sky" src="underwater-equi.jpg">
+        </a-assets>
+
+        <a-entity camera kinematic-body
+            universal-controls="movementControls: twoway" 
+            position="0 .5 2" rotation="0 0 0" jump-ability="maxJumps: 2;">
+            <a-cursor pitchmeter color="white" scale="2 2 2"></a-cursor>
+        </a-entity>
+
+        <a-entity id="forest-floor" obj-model="obj: #forest-floor; mtl: #forest-floor-mtl;" position="0 -1 0" scale = "1 0.2 1"></a-entity>
+
+        <a-collada-model src="#fish-dae" position="-2 1 -2" scale = "2 2 2"></a-collada-model>
+
+        <a-ocean id="ocean" rotation="90 0 0" position="0 30 0" opacity="0.4" scale="10 10 10" width="100" depth="100" density="35" speed="2"></a-ocean>
+        <a-light id="ocean-light-top" type="point" color="#aaf" light="" position="0 22 0" rotation="" scale="" visible=""></a-light>
+        <a-light id="ocean-light" type="ambient" color="#22e" light="" position="" rotation="" scale="" visible=""></a-light>
+
+        <a-sky src="#sky"></a-sky>
+
+        <a-entity id="graph-container" position="0 0 0" scale=".3 .3 .3" rotation="0 0 0">
+
+    <a-animation attribute="scale" begin="zoomin"
+        direction="normal" dur="600" repeat="0" fill="forwards"
+        to="1 1 1"></a-animation>
+
+    <a-animation attribute="scale" begin="zoomout"
+        direction="normal" dur="600" repeat="0" fill="forwards"
+        to="0.3 0.3 0.3"></a-animation>
+
+    <a-entity id="graph-lifter" position="0 -1 0">
+
+
+
+  <!-- Title -->
+  <a-entity position="-1.5 3 0">
+    <a-entity bmfont-text="text: Temp., Dissolved O2, Fluorescence | Lake Erie '05; color: #FFF"></a-entity>
+  </a-entity>
+
+  <!-- Legend -->
+
+  <a-entity position="-2.5 1 1" scale="0.8 0.8 0.8">
+    <a-entity bmfont-text="text: 5 C; color: #FFF">
+      <a-sphere radius="0.03" color="hsl(250, 100%, 50%)" position="-0.1 0.05 0"></a-sphere>
+    </a-entity>
+
+    <a-entity bmfont-text="text: 9 C; color: #FFF" position="0 0.25 0">
+      <a-sphere radius="0.03" color="hsl(210, 100%, 50%)" position="-0.1 0.05 0"></a-sphere>
+    </a-entity>
+
+    <a-entity bmfont-text="text: 13 C; color: #FFF" position="0 .5 0">
+      <a-sphere radius="0.03" color="hsl(170, 100%, 50%)" position="-0.1 0.05 0"></a-sphere>
+    </a-entity>
+
+    <a-entity bmfont-text="text: 17 C; color: #FFF" position="0 .75 0">
+      <a-sphere radius="0.03" color="hsl(130, 100%, 50%)" position="-0.1 0.05 0"></a-sphere>
+    </a-entity>
+
+    <a-entity bmfont-text="text: 21 C; color: #FFF" position="0 1 0">
+      <a-sphere radius="0.03" color="hsl(90, 100%, 50%)" position="-0.1 0.05 0"></a-sphere>
+    </a-entity>
+
+    <a-entity bmfont-text="text: 25 C; color: #FFF" position="0 1.25 0">
+      <a-sphere radius="0.03" color="hsl(50, 100%, 50%)" position="-0.1 0.05 0"></a-sphere>
+    </a-entity>
+
+  </a-entity>
+
+  <!-- Graph -->
+
+  <a-entity position="0 1 0"
+            graph="csv:NOAA-Data-Fl.csv;
+            width: 2.5;
+            height: 1.5;
+            depth: 2.5">
+  </a-entity>
+
+        <a-plane static-body width="100" height="100" color="#ff0000" opacity="0.1" position="0 0 0" material="side: double" rotation="90 0 0"></a-plane>
+    </a-scene>
+
+    <script type="text/javascript">
+ 
+    </script>
+
+</body>
+
+</html>
