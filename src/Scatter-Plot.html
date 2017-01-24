@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<head>
+
+<meta charset="utf-8">
+
+
+
+    <title>Temperature, Dissolved Oxygen, and Fluorescence - Lake Erie 2005 | VR scatterplot</title>
+
+    <script src="../components/aframe/0.3.2/aframe.min.js"></script>
+
+    <script src="../components/aframe/0.3.0/orbit-bundle.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+
+    <script src="https://rawgit.com/bryik/aframe-bmfont-text-component/master/dist/aframe-bmfont-text-component.min.js"></script> 
+
+    <script src="../components/aframe/0.3.0/aframe-scatter-component-flo-2.js"></script>
+
+<!--
+
+<script src="https://rawgit.com/mayognaise/aframe-mouse-cursor-component/master/dist/aframe-mouse-cursor-component.min.js"></script>
+
+<script src="https://rawgit.com/mayognaise/aframe-mouse-cursor-component/master/dist/aframe-mouse-cursor-component.min.js"></script>
+
+-->
+
+</head>
+
+<body>
+
+<script>
+
+  zoomed = false; 
+
+  doclick = function() {
+
+    var scene = document.querySelector(['a-scene']);
+
+    if (scene.isMobile) {
+
+      console.log('click'); 
+
+      var box = document.getElementById('graph-container');
+
+      if (zoomed === false){
+
+        box.emit("zoomin");
+
+        zoomed = true;
+
+      } else {
+
+        box.emit("zoomout");
+
+        zoomed = false;
+
+      }
+
+    }
+
+  }
+
+</script>
+
+
+
+<a-scene antialias='true' onclick="doclick();">
+
+
+
+  <!-- Camera -->
+
+  <a-entity position="0 0 0">
+
+    <a-entity camera orbit-controls target="#graph-container" distance="1.5"></a-entity>
+
+  </a-entity>
+
+
+
+<a-entity id="graph-container" position="0 0 0" scale=".3 .3 .3" rotation="0 0 0">
+
+    <a-animation attribute="scale" begin="zoomin"
+
+        direction="normal" dur="600" repeat="0" fill="forwards"
+
+        to="1 1 1"></a-animation>
+
+    <a-animation attribute="scale" begin="zoomout"
+
+        direction="normal" dur="600" repeat="0" fill="forwards"
+
+        to="0.3 0.3 0.3"></a-animation>
+
+
+
+<a-entity id="graph-lifter" position="0 -1 0">
+
+
+
+  <!-- Title -->
+
+  <a-entity position="-1.5 3 0">
+
+    <a-entity bmfont-text="text: Temp., Dissolved O2, Fluorescence | Lake Erie '05; color: #FFF"></a-entity>
+
+  </a-entity>
+
+
+
+  <!-- Legend -->
+
+  <a-entity position="-2.5 1 1" scale="0.8 0.8 0.8">
+
+    <a-entity bmfont-text="text: 5 C; color: #FFF">
+
+      <a-sphere radius="0.03" color="hsl(250, 100%, 50%)" position="-0.1 0.05 0"></a-sphere>
+
+    </a-entity>
+
+    <a-entity bmfont-text="text: 9 C; color: #FFF" position="0 0.25 0">
+
+      <a-sphere radius="0.03" color="hsl(210, 100%, 50%)" position="-0.1 0.05 0"></a-sphere>
+
+    </a-entity>
+
+    <a-entity bmfont-text="text: 13 C; color: #FFF" position="0 .5 0">
+
+      <a-sphere radius="0.03" color="hsl(170, 100%, 50%)" position="-0.1 0.05 0"></a-sphere>
+
+    </a-entity>
+
+    <a-entity bmfont-text="text: 17 C; color: #FFF" position="0 .75 0">
+
+      <a-sphere radius="0.03" color="hsl(130, 100%, 50%)" position="-0.1 0.05 0"></a-sphere>
+
+    </a-entity>
+
+    <a-entity bmfont-text="text: 21 C; color: #FFF" position="0 1 0">
+
+      <a-sphere radius="0.03" color="hsl(90, 100%, 50%)" position="-0.1 0.05 0"></a-sphere>
+
+    </a-entity>
+
+    <a-entity bmfont-text="text: 25 C; color: #FFF" position="0 1.25 0">
+
+      <a-sphere radius="0.03" color="hsl(50, 100%, 50%)" position="-0.1 0.05 0"></a-sphere>
+
+    </a-entity>
+
+  </a-entity>
+
+
+
+  <!-- Graph -->
+
+  <a-entity position="0 0 0"
+
+            graph="csv:NOAA-Data-Fl.csv;
+
+            width: 2.5;
+
+            height: 1;
+
+            depth: 2.5">
+
+  </a-entity>
+
+</a-entity>
+
+
+
+</a-entity>
+
+
+
+  <a-sky src="../360s/mansion-beach-2.jpg"></a-sky>
+
+</a-scene>
+
+
+
+</body>
+
+</html>
